@@ -42,7 +42,6 @@ import maya.cmds as cmds
 # Clear the scene.
 cmds.file(new=True, force=True)
 
-
 def generate_pattern():
     """Generate a procedural pattern of objects using nested loops.
 
@@ -57,32 +56,32 @@ def generate_pattern():
     num_cols = 5        # Number of columns in the pattern.
     spacing = 3.0       # Distance between object centers.
 
-    # TODO: Create a nested loop that iterates over rows and columns.
-    #
-    # HINT -- your loop structure should look something like this:
-    #
-    #   for row in range(num_rows):
-    #       for col in range(num_cols):
-    #           # Calculate position
-    #           x_pos = col * spacing
-    #           z_pos = row * spacing
-    #
-    #           # TODO: Add a conditional here that changes something
-    #           # based on row, col, or (row + col).
-    #           # For example:
-    #           #   if (row + col) % 2 == 0:
-    #           #       create a cube
-    #           #   else:
-    #           #       create a sphere
-    #
-    #           # TODO: Create the object using cmds.polyCube(), etc.
-    #
-    #           # TODO: Position the object using cmds.move().
-    #
-    #           # TODO: (Optional) Vary the scale using cmds.scale().
+    for row in range(num_rows):
+        for col in range(num_cols):
+            # Calculate position
+            x_pos = col * spacing
+            z_pos = row * spacing
+            # Determine sizing of shapes
+            cube_size = 0.8
+            cone_size = 0.8
+            sphere_size = 0.5
 
-    pass  # Remove this line once you add your code.
-
+            # Alternate between cubes, cones, and spheres
+            # Create cubes
+            if (row + col) % 3 == 0:
+                cube_name = "gridCube_{}_{}".format(row, col)
+                cube = cmds.polyCube(name=cube_name, width=cube_size, height=cube_size, depth=cube_size)[0]
+                cmds.move(x_pos, cube_size / 2.0, z_pos, cube)
+            # Create cones 
+            elif (row + col) % 3 == 1:
+                cone_name = "gridCone_{}_{}".format(row, col)
+                cone = cmds.polyCone(name=cone_name, height=cone_size, radius=sphere_size)[0]
+                cmds.move(x_pos, cone_size / 2.0, z_pos, cone)
+            # Create spheres
+            else:
+                sphere_name = "gridSphere_{}_{}".format(row, col)
+                sphere = cmds.polySphere(name=sphere_name, radius=sphere_size)[0]
+                cmds.move(x_pos, sphere_size, z_pos, sphere)
 
 # ---------------------------------------------------------------------------
 # Run the generator
